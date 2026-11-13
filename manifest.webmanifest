@@ -1,0 +1,17 @@
+{
+  "name": "Solankar Dairy",
+  "short_name": "Dairy Manager",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f5f8f5",
+  "theme_color": "#123b2b",
+  "description": "Milk collection and dairy expense manager",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

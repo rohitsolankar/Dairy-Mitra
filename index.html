@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#123b2b"><meta name="description" content="Simple milk collection and cattle feed management for dairy farmers.">
+<link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon.svg" type="image/svg+xml">
+<title>Solankar Dairy | Smart Dairy Manager</title><link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand"><div class="brandmark">🥛</div><div><div id="brandName" class="brandname">Solankar Dairy</div><div class="tagline">SMART DAIRY MANAGER</div></div></div>
+  <div class="top-actions"><button class="iconbtn" id="installBtn" hidden>＋ Install</button><button class="iconbtn" id="accountBtn">☁ Account</button></div>
+</header>
+<main class="wrap">
+  <section class="welcome">
+    <div><p class="eyebrow" id="todayLabel">DAILY OVERVIEW</p><h1>Good day, Farmer 👋</h1><p class="muted">Your dairy records, made simple.</p></div>
+    <button class="secondary" id="settingsBtn">⚙ Dairy settings</button>
+  </section>
+  <section class="stats">
+    <article class="stat"><span>Today’s milk</span><strong id="todayLitres">0.00 L</strong><small>Morning + evening</small></article>
+    <article class="stat"><span>Today’s sales</span><strong id="todaySales">₹0.00</strong><small>Only entries with a rate</small></article>
+    <article class="stat"><span>15-day milk</span><strong id="periodLitres">0.00 L</strong><small>Current 15-day period</small></article>
+    <article class="stat"><span>15-day net</span><strong id="periodNet">—</strong><small>Sales less recorded feed costs</small></article>
+  </section>
+  <nav class="tabs" aria-label="Sections">
+    <button class="tab active" data-tab="milk">🥛 Milk entry</button><button class="tab" data-tab="feed">🌾 Feed costs</button><button class="tab" data-tab="report">📊 15-day report</button><button class="tab" data-tab="history">🗂 History</button>
+  </nav>
+  <section id="milk" class="panel active">
+    <div class="sectionhead"><div><p class="eyebrow">COLLECTION REGISTER</p><h2>Add milk record</h2></div><span class="pill">Morning / Evening</span></div>
+    <form id="milkForm" class="entryform">
+      <label>Date<input id="milkDate" type="date" required></label>
+      <label>Collection time<select id="milkShift"><option value="Morning">Morning</option><option value="Evening">Evening</option></select></label>
+      <label>Milk quantity (litres)<input id="milkQty" type="number" min="0.01" step="0.01" inputmode="decimal" placeholder="e.g. 12.5" required></label>
+      <label>Rate per litre (₹) <span class="optional">Optional</span><input id="milkRate" type="number" min="0" step="0.01" inputmode="decimal" placeholder="Leave blank if unknown"></label>
+      <div class="calcbox"><span>Estimated sale for this entry</span><strong id="entryTotal">Rate not entered</strong></div>
+      <button class="primary" type="submit">＋ Save milk entry</button>
+    </form>
+    <div class="subhead"><h3>Today’s collection</h3><span id="todayDateText" class="muted"></span></div>
+    <div class="shiftgrid"><div class="shiftcard"><span>☀ Morning</span><strong id="morningToday">0.00 L</strong><small id="morningTodaySale">Sales: —</small></div><div class="shiftcard"><span>☾ Evening</span><strong id="eveningToday">0.00 L</strong><small id="eveningTodaySale">Sales: —</small></div></div>
+  </section>
+  <section id="feed" class="panel">
+    <div class="sectionhead"><div><p class="eyebrow">EXPENSE REGISTER</p><h2>Cattle feed costs</h2></div><span class="pill">Name + price only</span></div>
+    <form id="feedForm" class="entryform">
+      <label>Date<input id="feedDate" type="date" required></label>
+      <label>Feed name<input id="feedName" maxlength="60" placeholder="e.g. Cattle feed" required></label>
+      <label>Price / expense (₹) <span class="optional">Optional</span><input id="feedPrice" type="number" min="0" step="0.01" inputmode="decimal" placeholder="Leave blank if unknown"></label>
+      <p class="hint">No feed quantity is collected. Enter the total feed expense for the selected date.</p>
+      <button class="primary" type="submit">＋ Save feed expense</button>
+    </form>
+    <div class="subhead"><h3>Recent feed expenses</h3></div><div id="recentFeed" class="recordlist"></div>
+  </section>
+  <section id="report" class="panel">
+    <div class="sectionhead"><div><p class="eyebrow">PERFORMANCE SUMMARY</p><h2>15-day report</h2></div><span class="pill" id="periodRange"></span></div>
+    <div class="reportgrid">
+      <article><span>Morning quantity</span><strong id="rMorningQty">0.00 L</strong><small id="rMorningSale">Sales: —</small></article>
+      <article><span>Evening quantity</span><strong id="rEveningQty">0.00 L</strong><small id="rEveningSale">Sales: —</small></article>
+      <article><span>Total milk</span><strong id="rTotalQty">0.00 L</strong><small>15-day quantity</small></article>
+      <article><span>Milk sales</span><strong id="rSales">—</strong><small id="rUnknownRates">Rate status</small></article>
+      <article><span>Feed expenses</span><strong id="rFeed">—</strong><small id="rUnknownFeed">Recorded feed costs</small></article>
+      <article class="net"><span>Estimated net profit</span><strong id="rNet">—</strong><small>Milk sales − feed expenses</small></article>
+    </div>
+    <p class="notice">If any milk rate is missing, sales and net profit are marked incomplete rather than guessed. Feed entries with unknown prices are listed but excluded from the expense total, so net profit is only final when all relevant prices are entered.</p>
+    <div class="reportactions"><button class="primary" id="downloadReport">⬇ Download 15-day PDF</button><button class="secondary" id="downloadCSV">⬇ Download CSV</button></div>
+    <div class="subhead"><h3>Daily breakdown</h3></div><div id="dailyBreakdown" class="tablewrap"></div>
+  </section>
+  <section id="history" class="panel">
+    <div class="sectionhead"><div><p class="eyebrow">ALL SAVED RECORDS</p><h2>History</h2></div><span class="pill" id="recordCount">0 records</span></div>
+    <div class="historytools"><input id="historySearch" type="search" placeholder="Search date, shift or feed name…"><button class="secondary" id="exportBackup">Export backup</button><label class="secondary filelabel">Import backup<input id="importBackup" type="file" accept="application/json" hidden></label></div>
+    <div id="allRecords" class="recordlist"></div>
+  </section>
+  <footer><span>🥛 <b id="footerName">Solankar Dairy</b></span><span>Records stay on this device; sign in to sync across devices.</span></footer>
+</main>
+<dialog id="settingsDialog"><form method="dialog" class="dialogform"><div class="dialoghead"><h2>Dairy settings</h2><button class="close" aria-label="Close">×</button></div><label>Your dairy name<input id="dairyNameInput" maxlength="50" placeholder="Enter your dairy name"></label><button class="primary" id="saveSettings" value="save">Save settings</button></form></dialog>
+<dialog id="accountDialog"><form method="dialog" class="dialogform"><div class="dialoghead"><h2>Cloud backup & sync</h2><button class="close" aria-label="Close">×</button></div><p class="muted">Optional. Create an account or sign in to access the same dairy records on another phone. Without an account, records stay in this browser.</p><label>Email<input id="authEmail" type="email" autocomplete="email" placeholder="you@example.com"></label><label>Password<input id="authPassword" type="password" minlength="6" autocomplete="current-password" placeholder="At least 6 characters"></label><div class="authbuttons"><button class="primary" id="signIn" type="button">Sign in</button><button class="secondary" id="signUp" type="button">Create account</button></div><button class="secondary full" id="signOut" type="button" hidden>Sign out</button><p id="authStatus" class="hint" role="status">Not signed in. Local saving is active.</p></form></dialog>
+<div id="toast" role="status" aria-live="polite"></div>
+<script type="module" src="app.js"></script>
+</body></html>
